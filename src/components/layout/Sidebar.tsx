@@ -1,7 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, ListTodo, Settings, LogOut, GraduationCap, Menu, X } from "lucide-react";
+import { LayoutDashboard, Calendar, ListTodo, Settings, LogOut, Menu, X } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { useState } from "react";
+import logo from "@/assets/logo.png";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },

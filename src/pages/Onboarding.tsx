@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2, ArrowRight, GraduationCap } from "lucide-react";
+import { Plus, Trash2, ArrowRight } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { CLASS_COLORS, DAYS_OF_WEEK } from "@/types/schedule";
 
 interface ClassDraft {
@@ -67,9 +68,7 @@ const Onboarding = () => {
       <div className="mx-auto max-w-2xl animate-fade-in">
         {/* Header */}
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary glow-primary">
-            <GraduationCap className="h-6 w-6 text-primary-foreground" />
-          </div>
+          <img src={logo} alt="GatiSchool" className="h-12 w-12 rounded-xl" />
           <h1 className="text-2xl font-bold text-foreground">Set Up Your Schedule</h1>
           <p className="text-sm text-muted-foreground max-w-md">
             Add your classes below. You can always edit these later.

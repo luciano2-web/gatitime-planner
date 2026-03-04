@@ -1,19 +1,26 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ClassSchedule } from "@/types/schedule";
+
+export type NotificationStatus = "unsupported" | "default" | "granted" | "denied";
 
 export const useNotifications = (classes: ClassSchedule[]) => {
   const notifiedRef = useRef<Set<string>>(new Set());
+  const [status, setStatus] = useState<NotificationStatus>(() => {
+    if (!("Notification" in window)) return "unsupported";
+    return Notification.permission as NotificationStatus;
+  });
 
-  useEffect(() => {
-    if (!("Notification" in window)) return;
-    if (Notification.permission === "default") {
-      Notification.requestPermission();
-    }
+  const requestPermission = useCallback(async () => {
+    if (!("Notification" in window)) return false;
+    const perm = await Notification.requestPermission();
+    setStatus(perm as NotificationStatus);
+    return perm === "granted";
   }, []);
 
+  // Check every 10 seconds for upcoming classes
   useEffect(() => {
     const interval = setInterval(() => {
-      if (Notification.permission !== "granted") return;
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
 
       const now = new Date();
       const today = now.getDay();
@@ -31,17 +38,14 @@ export const useNotifications = (classes: ClassSchedule[]) => {
           new Notification(`📚 ${cls.subject} starts in ${diff} min`, {
             body: "Get ready for class!",
             icon: "/favicon.ico",
+            tag: key,
           });
         }
       });
-    }, 30000);
+    }, 10000); // Check every 10 seconds for more accuracy
 
     return () => clearInterval(interval);
   }, [classes]);
-};
 
-export const requestNotificationPermission = async () => {
-  if (!("Notification" in window)) return false;
-  const perm = await Notification.requestPermission();
-  return perm === "granted";
+  return { status, requestPermission };
 };

@@ -3,7 +3,7 @@ import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Clock, Bell, BookOpen, ChevronRight } from "lucide-react";
 import { DAYS_FULL } from "@/types/schedule";
-import { useNotifications, requestNotificationPermission } from "@/hooks/useNotifications";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const Dashboard = () => {
   const { classes, userName, tasks } = useApp();

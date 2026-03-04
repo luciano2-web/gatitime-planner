@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Trash2, ArrowRight, GraduationCap } from "lucide-react";
+import { Plus, Trash2, ArrowRight } from "lucide-react";
+import logo from "@/assets/logo.png";
 import { CLASS_COLORS, DAYS_OF_WEEK } from "@/types/schedule";
 
 interface ClassDraft {

@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { classes, userName, tasks } = useApp();
   const [now, setNow] = useState(new Date());
 
-  useNotifications(classes);
+  const { status: notifStatus, requestPermission } = useNotifications(classes);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);

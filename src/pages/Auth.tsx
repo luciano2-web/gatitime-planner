@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GraduationCap, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Auth = () => {
   const [isSignup, setIsSignup] = useState(false);

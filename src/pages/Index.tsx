@@ -3,13 +3,13 @@ import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Clock, Bell, BookOpen, ChevronRight } from "lucide-react";
 import { DAYS_FULL } from "@/types/schedule";
-import { useNotifications, requestNotificationPermission } from "@/hooks/useNotifications";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const Dashboard = () => {
   const { classes, userName, tasks } = useApp();
   const [now, setNow] = useState(new Date());
 
-  useNotifications(classes);
+  const { status: notifStatus, requestPermission } = useNotifications(classes);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -114,16 +114,40 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Enable notifications */}
-      {typeof Notification !== "undefined" && Notification.permission === "default" && (
+      {/* Enable notifications prompt */}
+      {notifStatus === "default" && (
         <button
-          onClick={requestNotificationPermission}
-          className="w-full rounded-lg border border-border bg-card p-3 text-sm text-muted-foreground hover:border-primary/30 transition-colors flex items-center gap-2"
+          onClick={requestPermission}
+          className="w-full rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm text-foreground hover:bg-primary/10 transition-colors flex items-center gap-3"
         >
-          <Bell className="h-4 w-4 text-primary" />
-          Enable notifications to get reminded before class
-          <ChevronRight className="h-4 w-4 ml-auto" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15 shrink-0">
+            <Bell className="h-5 w-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <p className="font-medium">Activar notificaciones</p>
+            <p className="text-xs text-muted-foreground">Te avisaremos 10 minutos antes de cada clase</p>
+          </div>
+          <ChevronRight className="h-4 w-4 ml-auto text-muted-foreground" />
         </button>
+      )}
+
+      {notifStatus === "denied" && (
+        <div className="w-full rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-destructive/15 shrink-0">
+            <Bell className="h-5 w-5 text-destructive" />
+          </div>
+          <div className="text-left">
+            <p className="font-medium text-destructive">Notificaciones bloqueadas</p>
+            <p className="text-xs text-muted-foreground">Habilítalas en la configuración de tu navegador para recibir alertas</p>
+          </div>
+        </div>
+      )}
+
+      {notifStatus === "granted" && (
+        <div className="w-full rounded-xl border border-success/30 bg-success/5 p-3 text-sm flex items-center gap-3">
+          <Bell className="h-4 w-4 text-success" />
+          <p className="text-muted-foreground">✅ Notificaciones activas — recibirás alertas 10 min antes de clase</p>
+        </div>
       )}
 
       {/* Current class */}

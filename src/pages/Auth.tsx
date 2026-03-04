@@ -25,9 +25,7 @@ const Auth = () => {
       <div className="w-full max-w-md animate-fade-in">
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary glow-primary">
-            <GraduationCap className="h-7 w-7 text-primary-foreground" />
-          </div>
+          <img src={logo} alt="GatiSchool" className="h-14 w-14 rounded-2xl" />
           <h1 className="text-2xl font-bold text-foreground">GatiSchool</h1>
           <p className="text-sm text-muted-foreground">Organize your entire school day</p>
         </div>

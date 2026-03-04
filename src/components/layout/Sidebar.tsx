@@ -51,9 +51,7 @@ const Sidebar = () => {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary glow-primary-sm">
-              <GraduationCap className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="GatiSchool" className="h-9 w-9 rounded-lg" />
             <span className="text-lg font-bold text-foreground tracking-tight">GatiSchool</span>
           </div>
           <button onClick={() => setMobileOpen(false)} className="md:hidden text-muted-foreground">

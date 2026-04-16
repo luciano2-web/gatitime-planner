@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { AppState, ClassSchedule, Task } from "@/types/schedule";
+import { supabase } from "@/integrations/supabase/client";
 
 const DEFAULT_STATE: AppState = {
   classes: [],
@@ -38,6 +39,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return DEFAULT_STATE;
     }
   });
+
+  // Listen for Supabase auth state changes
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const name = session.user.user_metadata?.full_name 
+          || session.user.user_metadata?.name 
+          || session.user.email?.split("@")[0] 
+          || "Student";
+        setState(s => ({
+          ...s,
+          isAuthenticated: true,
+          userName: s.userName || name,
+        }));
+      } else {
+        setState(DEFAULT_STATE);
+        localStorage.removeItem("gatischool-data");
+      }
+    });
+
+    // Check existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const name = session.user.user_metadata?.full_name 
+          || session.user.user_metadata?.name 
+          || session.user.email?.split("@")[0] 
+          || "Student";
+        setState(s => ({
+          ...s,
+          isAuthenticated: true,
+          userName: s.userName || name,
+        }));
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("gatischool-data", JSON.stringify(state));
@@ -92,7 +130,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setState(s => ({ ...s, isAuthenticated: true, userName: name }));
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut();
     setState(DEFAULT_STATE);
     localStorage.removeItem("gatischool-data");
   }, []);

@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { classes, userName, tasks } = useApp();
   const [now, setNow] = useState(new Date());
 
-  const { status: notifStatus, requestPermission } = useNotifications(classes);
+  const { status: notifStatus, requestPermission, sendTestNotification } = useNotifications(classes);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -146,7 +146,15 @@ const Dashboard = () => {
       {notifStatus === "granted" && (
         <div className="w-full rounded-xl border border-success/30 bg-success/5 p-3 text-sm flex items-center gap-3">
           <Bell className="h-4 w-4 text-success" />
-          <p className="text-muted-foreground">✅ Notificaciones activas — recibirás alertas 10 min antes de clase</p>
+          <p className="text-muted-foreground flex-1">✅ Notificaciones activas — recibirás alertas 10 min antes de clase</p>
+          <Button
+            size="sm"
+            variant="outline"
+            className="shrink-0 border-success/30 text-success hover:bg-success/10"
+            onClick={sendTestNotification}
+          >
+            🔔 Probar notificación
+          </Button>
         </div>
       )}
 

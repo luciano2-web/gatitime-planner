@@ -11,6 +11,7 @@ import Dashboard from "./pages/Index";
 import CalendarPage from "./pages/Calendar";
 import TasksPage from "./pages/Tasks";
 import SettingsPage from "./pages/SettingsPage";
+import IntegrationsPage from "./pages/IntegrationsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,7 @@ const App = () => (
               <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/tasks" element={<TasksPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/integrations" element={<IntegrationsPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

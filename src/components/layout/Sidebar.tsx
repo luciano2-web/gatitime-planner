@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Calendar, ListTodo, Settings, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, Calendar, ListTodo, Settings, LogOut, Menu, X, Plug } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 import { useState } from "react";
 import logo from "@/assets/logo.png";
@@ -9,6 +9,7 @@ const navItems = [
   { to: "/calendar", icon: Calendar, label: "Calendar" },
   { to: "/tasks", icon: ListTodo, label: "Tasks" },
   { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/integrations", icon: Plug, label: "Integrations" },
 ];
 
 const Sidebar = () => {

@@ -77,14 +77,49 @@ export const useNotifications = (classes: ClassSchedule[]) => {
   }, []);
 
   const sendTestNotification = useCallback(async () => {
+    const log: string[] = [];
+    const add = (m: string) => { log.push(m); console.log("[notif-diag]", m); };
+
     if (!("Notification" in window)) {
       toast.error("Tu navegador no soporta notificaciones");
       return;
     }
+    add(`Permiso actual: ${Notification.permission}`);
     if (Notification.permission !== "granted") {
       toast.error("Primero activa los permisos de notificación");
       return;
     }
+
+    // 1. Verificar Service Worker
+    if (!("serviceWorker" in navigator)) {
+      add("Service Worker NO soportado en este navegador");
+    } else {
+      const reg = await registerSW();
+      if (!reg) {
+        add("Falló el registro del Service Worker");
+      } else {
+        add(`SW registrado. Estado: active=${!!reg.active} | installing=${!!reg.installing} | waiting=${!!reg.waiting}`);
+        add(`Scope: ${reg.scope}`);
+      }
+    }
+
+    // 2. Verificar visibilidad de la página (algunos navegadores ocultan notif si la pestaña está activa)
+    add(`Documento visible: ${document.visibilityState} | focused: ${document.hasFocus()}`);
+
+    // 3. Standalone / iOS PWA check
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+      || (navigator as any).standalone === true;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    add(`iOS: ${isIOS} | Standalone (PWA): ${isStandalone}`);
+
+    if (isIOS && !isStandalone) {
+      toast.error("En iOS debes añadir esta web a la pantalla de inicio para recibir notificaciones.", {
+        duration: 8000,
+      });
+      return;
+    }
+
+    // 4. Intentar mostrar
     const ok = await showNotification("🔔 GatiSchool - Prueba", {
       body: "¡Las notificaciones funcionan! Haz clic para abrir GatiSchool.",
       icon: "/favicon.ico",
@@ -92,10 +127,32 @@ export const useNotifications = (classes: ClassSchedule[]) => {
       tag: "test-notification",
       url: APP_URL,
     } as NotificationOptions & { url?: string });
+
     if (ok) {
-      toast.success("Notificación enviada — revisa tu centro de notificaciones");
+      // 5. Verificar que efectivamente quedó registrada en el SW
+      try {
+        const reg = await registerSW();
+        const active = await reg?.getNotifications?.({ tag: "test-notification" });
+        add(`Notificaciones activas con ese tag: ${active?.length ?? 0}`);
+        if (active && active.length > 0) {
+          toast.success("Notificación enviada correctamente. Revisa el centro de notificaciones del sistema.");
+        } else {
+          toast.warning(
+            "La notificación se envió pero no aparece. Causas habituales: modo No molestar activo, pestaña en primer plano, o el sistema operativo bloquea notificaciones del navegador. Revisa la consola para más detalles.",
+            { duration: 10000 }
+          );
+          console.warn("[notif-diag] Diagnóstico completo:\n" + log.join("\n"));
+        }
+      } catch (e) {
+        console.error("[notif-diag] No se pudo verificar getNotifications", e);
+        toast.success("Notificación enviada — revisa tu centro de notificaciones");
+      }
     } else {
-      toast.error("No se pudo mostrar la notificación. Verifica que tu sistema permita notificaciones del navegador.");
+      toast.error(
+        "No se pudo mostrar la notificación. Verifica que tu sistema permita notificaciones del navegador. Detalles en consola.",
+        { duration: 10000 }
+      );
+      console.warn("[notif-diag] Diagnóstico completo:\n" + log.join("\n"));
     }
   }, []);
 

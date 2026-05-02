@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
@@ -15,9 +15,25 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useApp();
+  const { login, isAuthenticated } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Redirige automáticamente cuando la sesión se vuelve activa
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleGuestLogin = () => {
+    login("Invitado");
+    toast({
+      title: "Modo invitado",
+      description: "Estás navegando sin cuenta. Tus datos no se guardarán.",
+    });
+    navigate("/onboarding", { replace: true });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -215,7 +231,16 @@ const Auth = () => {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
+        <button
+          type="button"
+          onClick={handleGuestLogin}
+          disabled={loading}
+          className="mt-4 w-full text-center text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+        >
+          Continuar sin cuenta (modo invitado) →
+        </button>
+
+        <p className="mt-4 text-center text-xs text-muted-foreground">
           Tus datos están seguros con Lovable Cloud ☁️
         </p>
       </div>

@@ -231,7 +231,16 @@ const Auth = () => {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">
+        <button
+          type="button"
+          onClick={handleGuestLogin}
+          disabled={loading}
+          className="mt-4 w-full text-center text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+        >
+          Continuar sin cuenta (modo invitado) →
+        </button>
+
+        <p className="mt-4 text-center text-xs text-muted-foreground">
           Tus datos están seguros con Lovable Cloud ☁️
         </p>
       </div>

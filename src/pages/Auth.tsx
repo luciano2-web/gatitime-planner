@@ -15,9 +15,25 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { login } = useApp();
+  const { login, isAuthenticated } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Redirige automáticamente cuando la sesión se vuelve activa
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleGuestLogin = () => {
+    login("Invitado");
+    toast({
+      title: "Modo invitado",
+      description: "Estás navegando sin cuenta. Tus datos no se guardarán.",
+    });
+    navigate("/onboarding", { replace: true });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

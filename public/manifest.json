@@ -1,0 +1,34 @@
+{
+  "name": "GatiSchool",
+  "short_name": "GatiSchool",
+  "description": "Organiza tus clases, tareas y enlaces en un solo lugar.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#22d3ee",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "64x64", "type": "image/x-icon" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Próxima clase",
+      "short_name": "Próxima",
+      "description": "Ir al dashboard con la próxima clase",
+      "url": "/",
+      "icons": [{ "src": "/favicon.ico", "sizes": "64x64" }]
+    },
+    {
+      "name": "Calendario",
+      "short_name": "Calendario",
+      "url": "/calendar",
+      "icons": [{ "src": "/favicon.ico", "sizes": "64x64" }]
+    },
+    {
+      "name": "Tareas",
+      "short_name": "Tareas",
+      "url": "/tasks",
+      "icons": [{ "src": "/favicon.ico", "sizes": "64x64" }]
+    }
+  ]
+}

@@ -2,9 +2,10 @@ import { useState, useMemo } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
 import { DAYS_OF_WEEK } from "@/types/schedule";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScheduleImporter } from "@/components/ScheduleImporter";
 
 const HOURS = Array.from({ length: 16 }, (_, i) => i + 6); // 6am–9pm
 
@@ -12,6 +13,7 @@ const CalendarPage = () => {
   const { classes } = useApp();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [showImporter, setShowImporter] = useState(false);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -79,7 +81,22 @@ const CalendarPage = () => {
 
   return (
     <div className="space-y-6 animate-fade-in pt-8 md:pt-0">
-      <h1 className="text-2xl font-bold text-foreground">Calendar</h1>
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <h1 className="text-2xl font-bold text-foreground">Calendar</h1>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowImporter(s => !s)}
+          className="gap-2 border-primary/40 text-primary hover:bg-primary/10"
+        >
+          <Sparkles className="h-4 w-4" />
+          Importar horario
+        </Button>
+      </div>
+
+      {showImporter && (
+        <ScheduleImporter onClose={() => setShowImporter(false)} />
+      )}
 
       <Tabs defaultValue="monthly">
         <TabsList>

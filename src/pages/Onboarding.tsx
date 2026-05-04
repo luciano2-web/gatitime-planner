@@ -26,6 +26,7 @@ const emptyClass = (): ClassDraft => ({
 
 const Onboarding = () => {
   const [drafts, setDrafts] = useState<ClassDraft[]>([emptyClass()]);
+  const [showImporter, setShowImporter] = useState(false);
   const { addClass, completeOnboarding, userName } = useApp();
   const navigate = useNavigate();
 
@@ -75,6 +76,33 @@ const Onboarding = () => {
             Add your classes below. You can always edit these later.
           </p>
         </div>
+
+        {/* Importer */}
+        {showImporter ? (
+          <div className="mb-6">
+            <ScheduleImporter
+              onClose={() => setShowImporter(false)}
+              onImported={() => {
+                completeOnboarding(userName);
+                navigate("/");
+              }}
+            />
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowImporter(true)}
+            className="mb-6 w-full rounded-xl border border-primary/30 bg-primary/5 p-4 text-left hover:bg-primary/10 transition-colors flex items-center gap-3 group"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 shrink-0">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="font-semibold text-foreground">¿Tienes una foto o PDF de tu horario?</p>
+              <p className="text-xs text-muted-foreground">La IA lo lee y crea tus clases automáticamente</p>
+            </div>
+            <ArrowRight className="h-4 w-4 text-primary group-hover:translate-x-1 transition-transform" />
+          </button>
+        )}
 
         {/* Class Forms */}
         <div className="space-y-4">

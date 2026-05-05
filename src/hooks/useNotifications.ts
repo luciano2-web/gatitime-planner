@@ -170,15 +170,32 @@ export const useNotifications = (classes: ClassSchedule[]) => {
         const [h, m] = cls.startTime.split(":").map(Number);
         const classMinutes = h * 60 + m;
         const diff = classMinutes - nowMinutes;
-        const key = `${cls.id}-${now.toDateString()}`;
+        const dayKey = now.toDateString();
 
-        if (diff > 0 && diff <= 10 && !notifiedRef.current.has(key)) {
-          notifiedRef.current.add(key);
+        // Aviso previo (10 min antes)
+        const preKey = `pre-${cls.id}-${dayKey}`;
+        if (diff > 0 && diff <= 10 && !notifiedRef.current.has(preKey)) {
+          notifiedRef.current.add(preKey);
           showNotification(`📚 ${cls.subject} empieza en ${diff} min`, {
-            body: cls.link ? "¡Haz clic para unirte a la clase!" : "¡Prepárate para la clase!",
+            body: cls.link ? "Toca para entrar a la clase" : "¡Prepárate para la clase!",
             icon: "/favicon.ico",
             badge: "/favicon.ico",
-            tag: key,
+            tag: preKey,
+            requireInteraction: true,
+            url: cls.link || APP_URL,
+          } as NotificationOptions & { url?: string });
+        }
+
+        // Aviso al iniciar la clase
+        const startKey = `start-${cls.id}-${dayKey}`;
+        if (diff <= 0 && diff >= -1 && !notifiedRef.current.has(startKey)) {
+          notifiedRef.current.add(startKey);
+          showNotification(`🎓 ${cls.subject} ha comenzado`, {
+            body: cls.link ? "Toca para entrar ahora a la clase" : "Tu clase está en curso",
+            icon: "/favicon.ico",
+            badge: "/favicon.ico",
+            tag: startKey,
+            requireInteraction: true,
             url: cls.link || APP_URL,
           } as NotificationOptions & { url?: string });
         }

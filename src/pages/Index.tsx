@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Clock, Bell, BookOpen, ChevronRight } from "lucide-react";
 import { DAYS_FULL } from "@/types/schedule";
 import { useNotifications } from "@/hooks/useNotifications";
+import { NextClassWidget } from "@/components/NextClassWidget";
 
 const Dashboard = () => {
   const { classes, userName, tasks } = useApp();
@@ -180,32 +181,8 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Countdown */}
-      {nextClass && !currentClass && countdown && (
-        <div className="rounded-xl border border-border bg-card p-6 text-center border-glow-hover transition-all">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Next Class</p>
-          <h3 className="text-lg font-semibold text-foreground mb-3">{nextClass.subject}</h3>
-          <div className="flex items-center justify-center gap-3 font-mono text-3xl md:text-4xl font-bold text-primary text-glow">
-            {countdown.hours > 0 && (
-              <>
-                <span>{String(countdown.hours).padStart(2, "0")}</span>
-                <span className="text-muted-foreground animate-pulse-glow">:</span>
-              </>
-            )}
-            <span>{String(countdown.mins).padStart(2, "0")}</span>
-            <span className="text-lg text-muted-foreground">min</span>
-          </div>
-          <p className="text-sm text-muted-foreground font-mono mt-2">
-            Starts at {nextClass.startTime}
-          </p>
-          {nextClass.link && (
-            <Button className="mt-4 glow-primary-sm" onClick={() => window.open(nextClass.link, "_blank")}>
-              Enter Class
-              <ExternalLink className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      )}
+      {/* Next Class Widget with realtime countdown */}
+      {!currentClass && <NextClassWidget classes={classes} />}
 
       {/* Today's Schedule */}
       <div>

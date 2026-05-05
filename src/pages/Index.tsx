@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Clock, Bell, BookOpen, ChevronRight } from "lucide-react";
 import { DAYS_FULL } from "@/types/schedule";
 import { useNotifications } from "@/hooks/useNotifications";
+import { NextClassWidget } from "@/components/NextClassWidget";
 
 const Dashboard = () => {
   const { classes, userName, tasks } = useApp();

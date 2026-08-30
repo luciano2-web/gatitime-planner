@@ -2,10 +2,12 @@ import { useState, useMemo } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ChevronLeft, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Sparkles, FileSpreadsheet } from "lucide-react";
 import { DAYS_OF_WEEK } from "@/types/schedule";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ScheduleImporter } from "@/components/ScheduleImporter";
+import { exportScheduleToExcel } from "@/lib/exportSchedule";
+import { toast } from "@/hooks/use-toast";
 
 const HOURS = Array.from({ length: 16 }, (_, i) => i + 6); // 6am–9pm
 

@@ -95,6 +95,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } else {
         userIdRef.current = null;
         setState(DEFAULT_STATE);
+        setLoading(false);
       }
     });
 
@@ -107,6 +108,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           || "Student";
         setState(s => ({ ...s, isAuthenticated: true, userName: s.userName || name }));
         loadAll(session.user.id);
+      } else {
+        setLoading(false);
       }
     });
 

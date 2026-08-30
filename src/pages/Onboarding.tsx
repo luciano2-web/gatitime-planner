@@ -75,7 +75,14 @@ const Onboarding = () => {
           <p className="text-sm text-muted-foreground max-w-md">
             Add your classes below. You can always edit these later.
           </p>
+          <button
+            onClick={async () => { await completeOnboarding(userName); navigate("/"); }}
+            className="text-sm text-primary underline-offset-4 hover:underline"
+          >
+            Omitir e ir a mi dashboard
+          </button>
         </div>
+
 
         {/* Importer */}
         {showImporter ? (

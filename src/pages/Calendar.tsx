@@ -2,10 +2,12 @@ import { useState, useMemo } from "react";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ChevronLeft, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Sparkles, FileSpreadsheet } from "lucide-react";
 import { DAYS_OF_WEEK } from "@/types/schedule";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ScheduleImporter } from "@/components/ScheduleImporter";
+import { exportScheduleToExcel } from "@/lib/exportSchedule";
+import { toast } from "@/hooks/use-toast";
 
 const HOURS = Array.from({ length: 16 }, (_, i) => i + 6); // 6am–9pm
 
@@ -83,15 +85,33 @@ const CalendarPage = () => {
     <div className="space-y-6 animate-fade-in pt-8 md:pt-0">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h1 className="text-2xl font-bold text-foreground">Calendar</h1>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowImporter(s => !s)}
-          className="gap-2 border-primary/40 text-primary hover:bg-primary/10"
-        >
-          <Sparkles className="h-4 w-4" />
-          Importar horario
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              if (classes.length === 0) {
+                toast({ title: "Sin clases", description: "Añade clases antes de exportar." });
+                return;
+              }
+              exportScheduleToExcel(classes);
+              toast({ title: "Horario exportado", description: "Se descargó tu archivo Excel." });
+            }}
+            className="gap-2"
+          >
+            <FileSpreadsheet className="h-4 w-4" />
+            Exportar Excel
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowImporter(s => !s)}
+            className="gap-2 border-primary/40 text-primary hover:bg-primary/10"
+          >
+            <Sparkles className="h-4 w-4" />
+            Importar horario
+          </Button>
+        </div>
       </div>
 
       {showImporter && (

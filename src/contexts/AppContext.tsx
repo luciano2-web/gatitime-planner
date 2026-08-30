@@ -11,6 +11,7 @@ const DEFAULT_STATE: AppState = {
 };
 
 interface AppContextType extends AppState {
+  loading: boolean;
   addClass: (cls: Omit<ClassSchedule, "id">) => Promise<void>;
   updateClass: (cls: ClassSchedule) => Promise<void>;
   deleteClass: (id: string) => Promise<void>;

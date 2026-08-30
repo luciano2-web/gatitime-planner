@@ -16,14 +16,22 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const Loader = () => (
+  <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+  </div>
+);
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useApp();
+  const { isAuthenticated, loading } = useApp();
+  if (loading) return <Loader />;
   if (!isAuthenticated) return <Navigate to="/auth" replace />;
   return <>{children}</>;
 };
 
 const OnboardingGate = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, onboardingComplete } = useApp();
+  const { isAuthenticated, onboardingComplete, loading } = useApp();
+  if (loading) return <Loader />;
   if (!isAuthenticated) return <Navigate to="/auth" replace />;
   if (!onboardingComplete) return <Navigate to="/onboarding" replace />;
   return <>{children}</>;

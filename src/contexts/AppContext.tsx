@@ -205,6 +205,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <AppContext.Provider value={{
       ...state,
+      loading,
       addClass, updateClass, deleteClass,
       addTask, toggleTask, deleteTask,
       completeOnboarding, login, logout,

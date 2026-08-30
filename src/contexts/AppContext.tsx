@@ -52,6 +52,7 @@ const mapTask = (r: any): Task => ({
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<AppState>(DEFAULT_STATE);
+  const [loading, setLoading] = useState(true);
   const userIdRef = useRef<string | null>(null);
 
   const loadAll = useCallback(async (userId: string) => {
@@ -60,13 +61,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       supabase.from("tasks").select("*").eq("user_id", userId).order("due_date", { ascending: true }),
       supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
     ]);
+
+    const classList = (classes ?? []).map(mapClass);
+    // Si ya hay clases guardadas, el onboarding se considera completado.
+    const done = (profile?.onboarding_complete ?? false) || classList.length > 0;
+
+    if (!profile) {
+      await supabase.from("profiles").insert({ user_id: userId, onboarding_complete: done });
+    } else if (done && !profile.onboarding_complete) {
+      await supabase.from("profiles").update({ onboarding_complete: true }).eq("user_id", userId);
+    }
+
     setState(s => ({
       ...s,
-      classes: (classes ?? []).map(mapClass),
+      classes: classList,
       tasks: (tasks ?? []).map(mapTask),
-      onboardingComplete: profile?.onboarding_complete ?? false,
+      onboardingComplete: done,
       userName: profile?.display_name ?? s.userName,
     }));
+    setLoading(false);
   }, []);
 
   useEffect(() => {

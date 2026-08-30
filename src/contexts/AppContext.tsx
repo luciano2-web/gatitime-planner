@@ -189,7 +189,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const completeOnboarding = useCallback(async (name: string) => {
     const uid = userIdRef.current;
     if (!uid) return;
-    await supabase.from("profiles").update({ display_name: name, onboarding_complete: true }).eq("user_id", uid);
+    await supabase.from("profiles").upsert(
+      { user_id: uid, display_name: name, onboarding_complete: true },
+      { onConflict: "user_id" }
+    );
     setState(s => ({ ...s, onboardingComplete: true, userName: name }));
   }, []);
 

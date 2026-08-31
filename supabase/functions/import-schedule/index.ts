@@ -45,9 +45,10 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => null);
     const fileBase64 = body?.fileBase64 as string | undefined;
+    const sheetText = body?.sheetText as string | undefined;
     const mimeType = (body?.mimeType as string | undefined) ?? "image/jpeg";
-    if (!fileBase64) {
-      return new Response(JSON.stringify({ error: "fileBase64 is required" }), {
+    if (!fileBase64 && !sheetText) {
+      return new Response(JSON.stringify({ error: "fileBase64 or sheetText is required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

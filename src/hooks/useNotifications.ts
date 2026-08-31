@@ -4,7 +4,9 @@ import { toast } from "sonner";
 
 export type NotificationStatus = "unsupported" | "default" | "granted" | "denied";
 
-const APP_URL = "https://gatitime-planner.lovable.app/";
+// Usa el dominio real donde está corriendo la app (preview, .lovable.app o dominio propio).
+const APP_URL =
+  typeof window !== "undefined" ? `${window.location.origin}/` : "/";
 
 let swRegistration: ServiceWorkerRegistration | null = null;
 

@@ -60,7 +60,16 @@ Deno.serve(async (req) => {
       });
     }
 
-    const dataUrl = `data:${mimeType};base64,${fileBase64}`;
+    const userContent = sheetText
+      ? [{
+          type: "text",
+          text: `Extrae todas las clases del siguiente horario en formato tabla (exportado de Excel/CSV):\n\n${sheetText.slice(0, 20000)}`,
+        }]
+      : [
+          { type: "text", text: "Extrae todas las clases del siguiente horario." },
+          { type: "image_url", image_url: { url: `data:${mimeType};base64,${fileBase64}` } },
+        ];
+
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

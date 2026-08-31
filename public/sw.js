@@ -1,5 +1,6 @@
-// GatiSchool Service Worker for notifications
-self.addEventListener('install', (event) => {
+// GatiSchool Service Worker — solo notificaciones (no cachea nada).
+// Funciona en cualquier dominio: preview, gatitime-planner.lovable.app o dominio propio.
+self.addEventListener('install', () => {
   self.skipWaiting();
 });
 
@@ -9,13 +10,36 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  const url = event.notification.data?.url || 'https://gatitime-planner.lovable.app/';
+
+  // URL de la clase si existe; si no, el origen real donde está instalada la app.
+  const appOrigin = new URL(self.registration.scope).origin + '/';
+  const target = event.notification.data?.url || appOrigin;
+
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url === url && 'focus' in client) return client.focus();
+    (async () => {
+      const clientList = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+
+      let isExternal = true;
+      try {
+        isExternal = new URL(target, appOrigin).origin !== appOrigin.replace(/\/$/, '');
+      } catch (_) {
+        isExternal = false;
       }
-      if (self.clients.openWindow) return self.clients.openWindow(url);
-    })
+
+      // Si el destino es de la propia app, reutiliza una ventana ya abierta.
+      if (!isExternal) {
+        for (const client of clientList) {
+          if ('focus' in client) {
+            await client.focus();
+            if ('navigate' in client && client.url !== target) {
+              try { await client.navigate(target); } catch (_) { /* noop */ }
+            }
+            return;
+          }
+        }
+      }
+
+      if (self.clients.openWindow) await self.clients.openWindow(target);
+    })()
   );
 });

@@ -135,7 +135,7 @@ export const ScheduleImporter = ({ onClose, onImported }: Props) => {
         <div className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
           <div>
-            <h3 className="font-semibold text-foreground">Importar desde foto o PDF</h3>
+            <h3 className="font-semibold text-foreground">Importar desde foto, PDF o Excel</h3>
             <p className="text-xs text-muted-foreground">
               La IA detectará tus clases automáticamente. Podrás revisarlas antes de guardar.
             </p>
@@ -153,7 +153,7 @@ export const ScheduleImporter = ({ onClose, onImported }: Props) => {
           <input
             ref={inputRef}
             type="file"
-            accept="image/*,application/pdf"
+            accept="image/*,application/pdf,.xlsx,.xls,.csv"
             className="hidden"
             onChange={e => {
               const f = e.target.files?.[0];
@@ -168,11 +168,11 @@ export const ScheduleImporter = ({ onClose, onImported }: Props) => {
             {loading ? (
               <><Loader2 className="h-4 w-4 animate-spin" /> Analizando {fileName}…</>
             ) : (
-              <><Upload className="h-4 w-4" /> Subir imagen o PDF del horario</>
+              <><Upload className="h-4 w-4" /> Subir imagen, PDF o Excel del horario</>
             )}
           </Button>
           <p className="text-[11px] text-muted-foreground text-center">
-            Formatos: JPG, PNG, PDF. Máx 8 MB.
+            Formatos: JPG, PNG, PDF, XLSX, XLS, CSV. Máx 8 MB.
           </p>
         </>
       )}

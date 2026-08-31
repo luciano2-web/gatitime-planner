@@ -12,16 +12,24 @@ let swRegistration: ServiceWorkerRegistration | null = null;
 
 const registerSW = async (): Promise<ServiceWorkerRegistration | null> => {
   if (swRegistration) return swRegistration;
-  if (!("serviceWorker" in navigator)) return null;
+  if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return null;
+  // Los service workers requieren HTTPS (o localhost). Android/iOS solo aceptan el dominio seguro.
+  if (!window.isSecureContext) {
+    console.warn("[notif] contexto no seguro, se requiere HTTPS para el service worker");
+    return null;
+  }
   try {
-    swRegistration = await navigator.serviceWorker.register("/sw.js");
-    await navigator.serviceWorker.ready;
+    // Registrado con scope "/" en el dominio actual (preview, .lovable.app o dominio propio).
+    swRegistration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+    await swRegistration.update().catch(() => undefined);
+    swRegistration = await navigator.serviceWorker.ready;
     return swRegistration;
   } catch (e) {
     console.error("[notif] SW register failed", e);
     return null;
   }
 };
+
 
 const showNotification = async (title: string, options: NotificationOptions & { url?: string }) => {
   const { url, ...rest } = options;

@@ -47,10 +47,28 @@ export const ScheduleImporter = ({ onClose, onImported }: Props) => {
     setLoading(true);
     setParsed(null);
     try {
-      const fileBase64 = await fileToBase64(file);
-      const { data, error } = await supabase.functions.invoke("import-schedule", {
-        body: { fileBase64, mimeType: file.type || "image/jpeg" },
-      });
+      const isSpreadsheet =
+        /\.(xlsx|xls|csv)$/i.test(file.name) ||
+        /sheet|excel|csv/i.test(file.type);
+
+      let body: Record<string, unknown>;
+      if (isSpreadsheet) {
+        const XLSX = await import("xlsx");
+        const wb = XLSX.read(await file.arrayBuffer(), { type: "array" });
+        const sheetText = wb.SheetNames.map(
+          name => `--- Hoja: ${name} ---\n${XLSX.utils.sheet_to_csv(wb.Sheets[name])}`
+        ).join("\n\n");
+        if (!sheetText.replace(/[,\s-]/g, "")) {
+          toast.error("El archivo Excel está vacío");
+          setLoading(false);
+          return;
+        }
+        body = { sheetText };
+      } else {
+        body = { fileBase64: await fileToBase64(file), mimeType: file.type || "image/jpeg" };
+      }
+
+      const { data, error } = await supabase.functions.invoke("import-schedule", { body });
       if (error) throw error;
       const classes = (data?.classes ?? []) as ParsedClass[];
       if (classes.length === 0) {

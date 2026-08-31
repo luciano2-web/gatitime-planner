@@ -45,9 +45,10 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => null);
     const fileBase64 = body?.fileBase64 as string | undefined;
+    const sheetText = body?.sheetText as string | undefined;
     const mimeType = (body?.mimeType as string | undefined) ?? "image/jpeg";
-    if (!fileBase64) {
-      return new Response(JSON.stringify({ error: "fileBase64 is required" }), {
+    if (!fileBase64 && !sheetText) {
+      return new Response(JSON.stringify({ error: "fileBase64 or sheetText is required" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -59,7 +60,16 @@ Deno.serve(async (req) => {
       });
     }
 
-    const dataUrl = `data:${mimeType};base64,${fileBase64}`;
+    const userContent = sheetText
+      ? [{
+          type: "text",
+          text: `Extrae todas las clases del siguiente horario en formato tabla (exportado de Excel/CSV):\n\n${sheetText.slice(0, 20000)}`,
+        }]
+      : [
+          { type: "text", text: "Extrae todas las clases del siguiente horario." },
+          { type: "image_url", image_url: { url: `data:${mimeType};base64,${fileBase64}` } },
+        ];
+
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -71,13 +81,7 @@ Deno.serve(async (req) => {
         model: "google/gemini-2.5-pro",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: "Extrae todas las clases del siguiente horario." },
-              { type: "image_url", image_url: { url: dataUrl } },
-            ],
-          },
+          { role: "user", content: userContent },
         ],
         tools: [{
           type: "function",

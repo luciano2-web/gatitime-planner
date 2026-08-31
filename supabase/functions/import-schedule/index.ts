@@ -81,13 +81,7 @@ Deno.serve(async (req) => {
         model: "google/gemini-2.5-pro",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: "Extrae todas las clases del siguiente horario." },
-              { type: "image_url", image_url: { url: dataUrl } },
-            ],
-          },
+          { role: "user", content: userContent },
         ],
         tools: [{
           type: "function",

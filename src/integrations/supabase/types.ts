@@ -113,6 +113,69 @@ export type Database = {
         }
         Relationships: []
       }
+      push_log: {
+        Row: {
+          class_id: string
+          created_at: string
+          day_key: string
+          id: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          day_key: string
+          id?: string
+          kind: string
+          user_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          day_key?: string
+          id?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          timezone: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          timezone?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          timezone?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           completed: boolean

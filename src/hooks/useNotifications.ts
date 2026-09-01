@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ClassSchedule } from "@/types/schedule";
 import { toast } from "sonner";
+import { enableWebPush } from "@/lib/webPush";
 
 export type NotificationStatus = "unsupported" | "default" | "granted" | "denied";
 
@@ -67,7 +68,13 @@ export const useNotifications = (classes: ClassSchedule[]) => {
   });
 
   useEffect(() => {
-    registerSW();
+    (async () => {
+      const reg = await registerSW();
+      // Si ya hay permiso, re-suscribe el dispositivo al push del servidor.
+      if (reg && "Notification" in window && Notification.permission === "granted") {
+        await enableWebPush(reg);
+      }
+    })();
   }, []);
 
   const requestPermission = useCallback(async () => {
@@ -78,8 +85,18 @@ export const useNotifications = (classes: ClassSchedule[]) => {
     const perm = await Notification.requestPermission();
     setStatus(perm as NotificationStatus);
     if (perm === "granted") {
-      await registerSW();
-      toast.success("Notificaciones activadas");
+      const reg = await registerSW();
+      const push = await enableWebPush(reg);
+      if (push.status === "registered") {
+        toast.success("Notificaciones activadas — llegarán incluso con la app cerrada");
+      } else if (push.status === "no-session") {
+        toast.success("Notificaciones activadas. Inicia sesión para recibirlas con la app cerrada.");
+      } else if (push.status === "unsupported") {
+        toast.success("Notificaciones activadas (este navegador no admite avisos con la app cerrada)");
+      } else {
+        toast.success("Notificaciones activadas");
+        toast.warning("No se pudo registrar el aviso con la app cerrada. Revisa la consola.");
+      }
     } else if (perm === "denied") {
       toast.error("Permiso denegado. Habilítalo en la configuración del navegador.");
     }

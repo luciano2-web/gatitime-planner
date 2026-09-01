@@ -8,6 +8,29 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
+// Notificaciones push del servidor: funcionan con la app cerrada.
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (_) {
+    data = { title: 'GatiSchool', body: event.data ? event.data.text() : '' };
+  }
+
+  const title = data.title || 'GatiSchool';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: data.body || '',
+      icon: '/favicon.ico',
+      badge: '/favicon.ico',
+      tag: data.tag || 'gatischool',
+      renotify: true,
+      requireInteraction: true,
+      data: { url: data.url || new URL(self.registration.scope).origin + '/' },
+    })
+  );
+});
+
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 

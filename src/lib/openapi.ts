@@ -135,3 +135,16 @@ export const buildOpenApiSchema = () => ({
 });
 
 export const API_BASE_URL = FUNCTIONS_BASE;
+
+export const MCP_SERVER_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/mcp`;
+
+export const MCP_TOOLS = [
+  "list_classes",
+  "create_class",
+  "update_class",
+  "delete_class",
+  "list_tasks",
+  "create_task",
+  "update_task",
+  "delete_task",
+];

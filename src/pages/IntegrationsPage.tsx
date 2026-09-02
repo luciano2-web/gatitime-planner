@@ -3,9 +3,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Plus, Trash2, Copy, Download, Check, AlertTriangle, Plug } from "lucide-react";
+import { Plus, Trash2, Copy, Download, Check, AlertTriangle, Plug, Bot } from "lucide-react";
 import { toast } from "sonner";
-import { buildOpenApiSchema, API_BASE_URL } from "@/lib/openapi";
+import { buildOpenApiSchema, API_BASE_URL, MCP_SERVER_URL, MCP_TOOLS } from "@/lib/openapi";
 
 interface ApiKeyRow {
   id: string;

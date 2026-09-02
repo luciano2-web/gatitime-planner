@@ -46,8 +46,7 @@ const mcp = new McpServer({
 
 // ---------- CLASSES ----------
 
-mcp.tool({
-  name: "list_classes",
+mcp.tool("list_classes", {
   description: "List all class schedule entries for the user.",
   inputSchema: { type: "object", properties: {} },
   handler: async () => {
@@ -62,8 +61,7 @@ mcp.tool({
   },
 });
 
-mcp.tool({
-  name: "create_class",
+mcp.tool("create_class", {
   description:
     "Create a new recurring class. days = array of weekday numbers (0=Sun..6=Sat). Times in HH:MM 24h.",
   inputSchema: {
@@ -95,8 +93,7 @@ mcp.tool({
   },
 });
 
-mcp.tool({
-  name: "update_class",
+mcp.tool("update_class", {
   description: "Update fields of an existing class by id.",
   inputSchema: {
     type: "object",
@@ -133,8 +130,7 @@ mcp.tool({
   },
 });
 
-mcp.tool({
-  name: "delete_class",
+mcp.tool("delete_class", {
   description: "Delete a class by id.",
   inputSchema: {
     type: "object",
@@ -155,8 +151,7 @@ mcp.tool({
 
 // ---------- TASKS ----------
 
-mcp.tool({
-  name: "list_tasks",
+mcp.tool("list_tasks", {
   description: "List all homework tasks / reminders for the user.",
   inputSchema: { type: "object", properties: {} },
   handler: async () => {
@@ -171,8 +166,7 @@ mcp.tool({
   },
 });
 
-mcp.tool({
-  name: "create_task",
+mcp.tool("create_task", {
   description: "Create a homework task or reminder. dueDate is ISO 8601.",
   inputSchema: {
     type: "object",
@@ -199,8 +193,7 @@ mcp.tool({
   },
 });
 
-mcp.tool({
-  name: "update_task",
+mcp.tool("update_task", {
   description: "Update a task by id.",
   inputSchema: {
     type: "object",
@@ -233,8 +226,7 @@ mcp.tool({
   },
 });
 
-mcp.tool({
-  name: "delete_task",
+mcp.tool("delete_task", {
   description: "Delete a task by id.",
   inputSchema: {
     type: "object",

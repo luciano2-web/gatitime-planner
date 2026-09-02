@@ -118,6 +118,35 @@ const IntegrationsPage = () => {
         </div>
       </div>
 
+      {/* MCP server */}
+      <Card className="p-5 space-y-3">
+        <div className="flex items-center gap-2">
+          <Bot className="w-4 h-4 text-primary" />
+          <div className="text-sm font-semibold">Servidor MCP (Model Context Protocol)</div>
+          <span className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded bg-primary/15 text-primary">
+            Acceso abierto
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Pega esta URL en los conectores de ChatGPT, Claude o Cursor para que lean y escriban tus clases y tareas.
+        </p>
+        <div className="flex items-center gap-2">
+          <code className="flex-1 text-xs bg-muted px-3 py-2 rounded font-mono break-all">{MCP_SERVER_URL}</code>
+          <Button size="icon" variant="ghost" onClick={() => copy(MCP_SERVER_URL)}>
+            <Copy className="w-4 h-4" />
+          </Button>
+        </div>
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {MCP_TOOLS.map(t => (
+            <span key={t} className="text-xs font-mono px-2 py-1 rounded bg-muted/60 text-muted-foreground">{t}</span>
+          ))}
+        </div>
+        <div className="flex items-start gap-2 text-xs text-amber-500">
+          <AlertTriangle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+          <span>Sin autenticación: cualquiera con esta URL puede leer y modificar los datos. Úsala solo para pruebas.</span>
+        </div>
+      </Card>
+
       {/* API base */}
       <Card className="p-5 space-y-3">
         <div className="text-sm font-semibold">Endpoint base</div>

@@ -1,73 +1,64 @@
-# Welcome to your Lovable project
+# Gati School Hub
 
-## Project info
+Create a full-stack web application called "GatiSchool" designed for students to organize their entire school day. The purpose is to help students manage class schedules, links to virtual classes (Zoom, Google Meet, etc.), homework reminders, and alarms in a simple, futuristic, distraction-free interface.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Core Features:
+1. Onboarding screen that asks:
+   - What time each class starts and ends
+   - Subject name
+   - Link to join the class
+   - Days of the week for each class
+2. Dashboard:
+   - Shows today's schedule in chronological order
+   - Shows countdown timer to next class
+   - "Enter Class" button that opens the stored link in a new tab
+3. Reminders & Notifications:
+   - Browser notifications 5–10 minutes before class
+   - Visual alert banner inside the app
+4. Calendar View:
+   - Monthly and weekly calendar
+   - Highlight days with classes
+5. Task Manager:
+   - Add homework with due dates
+   - Mark as completed
+6. Data Storage:
+   - Use a backend database so schedules persist
+   - User authentication (email + password)
+7. Design:
+   - Futuristic but minimal
+   - Dark mode default
+   - Clean typography
+   - Student-focused, no ads
 
-## How can I edit this code?
+User Flow:
+- User signs up or logs in
+- Completes onboarding schedule setup
+- Lands on dashboard
+- Can edit schedule anytime
 
-There are several ways of editing your application.
+Make it responsive for tablet and desktop use. Include authentication, database, and notification support. Ensure it is production-ready.
 
-**Use Lovable**
+This is intended as a real usable product, not a mockup.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+This project was built with [Lovable](https://lovable.dev).
 
-Changes made via Lovable will be committed automatically to this repo.
+**Live app**: https://gatitime-planner.lovable.app
 
-**Use your preferred IDE**
+## Build with Lovable
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/6f9f5734-fafe-4aa6-8cc6-178a567c4fbb).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Ship faster**: describe what you want to build and Lovable handles the code.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
-Follow these steps:
+## Development
+
+Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
+git clone <this-repository-url>
+cd <repository-name>
 npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
